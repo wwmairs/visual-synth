@@ -20,20 +20,19 @@ $(document).ready(() => {
           restriction: "parent",
           endOnly: true
         },
-        onmove: circle.move
+        onmove: (e) => {circle.move(e)}
       });
   })
 
-  // Deletion functionality
-  $body.on("click", ".tonecircle", (e) => {
+  // (Un)highlight clicked circles
+  $body.on("dblclick", ".tonecircle", (e) => {
     const circle = circles[e.target.id]
     circle.toggleHighlight();
-    console.log(circle.highlighted);
   })
+
   $body.keyup((e) => {
-    // Delete key pressed
-    if (e.keyCode == 8) {
-      console.log("hey!")
+    if (e.keyCode == keys.BACKSPACE) {
+      // Delete highlighted circles
       for (var circleID in circles) {
         const circle = circles[circleID];
         if (!circle.highlighted) continue;

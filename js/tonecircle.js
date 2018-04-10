@@ -5,7 +5,6 @@
   */
 
 const ctx = new (window.AudioContext || window.webkitAudioContext);
-const DIAMETER = 40;
 var globalID = 0;
 
 class ToneCircle {
@@ -21,17 +20,22 @@ class ToneCircle {
     
     // Initialize circle parameters
     this.highlighted = false;
-    const cx = initx - DIAMETER / 2;
-    const cy = inity - DIAMETER / 2;
+    const cx = initx - circleAttrs.DIAMETER / 2;
+    const cy = inity - circleAttrs.DIAMETER / 2;
     this.attrs = {
-      "style": "left:" + cx + "px; top:" + cy + "px",
+      "style": (
+        "left:" + cx + "px;" +
+        "top:" + cy + "px;" +
+        "height:" + circleAttrs.DIAMETER + "px;" +
+        "width:" + circleAttrs.DIAMETER + "px;" 
+      ),
       "class": "tonecircle",
       "type": wavetype,
       "id": "circle-" + globalID,
     }
     globalID += 1;
 
-    // jquery self-reference, initialized after "draw" called
+    // Jquery self-reference, initialized after "draw" is called
     this.$this = null;
   }
 
@@ -42,13 +46,15 @@ class ToneCircle {
     $canvas.append(circle)
     this.$this = $canvas.find("#" + this.attrs.id)
 
-    // TODO: power-up oscillator
+    // Power up oscillator
+    this.osc.frequency.setValueAtTime(0, ctx.currentTime);
+    this.gain.gain.setValueAtTime(0, ctx.currentTime);
+    this.osc.start(0);
   }
 
   erase() {
-    this.$this.remove()
-
-    // TODO: teardown oscillator
+    this.$this.remove();
+    this.osc.disconnect(ctx);
   }
 
   toggleHighlight() {
@@ -61,19 +67,23 @@ class ToneCircle {
 
   move(event) {
     var target = event.target,
-      // keep the dragged position in the data-x/data-y attributes
+      // Keep the dragged position in the data-x/data-y attributes
       x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
       y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-    // translate the element
+    // Translate the element
     target.style.webkitTransform =
       target.style.transform =
       'translate(' + x + 'px, ' + y + 'px)';
 
-    // update the posiion attributes
+    // Update the position attributes
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
 
-    // TODO: update oscillator
+    // Update oscillator attributes
+    const newGain = (window.innerHeight - event.pageY) / oscAttrs.GAINSCALE;
+    const newFreq = event.pageX / oscAttrs.FREQSCALE;
+    this.gain.gain.setValueAtTime(newGain, ctx.currentTime);
+    this.osc.frequency.setValueAtTime(newFreq, ctx.currentTime);
   }
 }
