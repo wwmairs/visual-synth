@@ -6,6 +6,10 @@ const circleAttrs = {
   DIAMETER: 40
 }
 
+const canvasAttrs = {
+  HEIGHT: 600
+}
+
 const oscAttrs = {
   FADE_DURATION: 1,
   GAINSCALE: 400,
