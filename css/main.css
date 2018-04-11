@@ -55,7 +55,7 @@ img {
 
 .osc-btn {
   height: 60px;
-  border: 1px solid;
+  border: 1px dashed;
   border-left: 0px;
   border-bottom: 0px;
   z-index: 1;
