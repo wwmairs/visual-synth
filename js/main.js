@@ -5,8 +5,9 @@ $(document).ready(() => {
 
   var circles = {};
 
+  // Create a new circle oscillator
   $btns.mousedown((e) => {
-    const wavetype = e.target.innerHTML;
+    const wavetype = e.target.id;
     const circle = new ToneCircle(e.pageX, e.pageY, wavetype);
     circles[circle.attrs.id] = circle;
 
@@ -20,7 +21,7 @@ $(document).ready(() => {
           restriction: "parent",
           endOnly: true
         },
-        onmove: (e) => {circle.move(e)}
+        onmove: (e) => {circle.move(e)},
       });
   })
 
@@ -30,6 +31,7 @@ $(document).ready(() => {
     circle.toggleHighlight();
   })
 
+  // Delete highlighted circles
   $body.keyup((e) => {
     if (e.keyCode == keys.BACKSPACE) {
       // Delete highlighted circles

@@ -35,7 +35,7 @@ class ToneCircle {
     }
     globalID += 1;
 
-    // Jquery self-reference, initialized after "draw" is called
+    // jQuery self-reference, initialized after "draw" is called
     this.$this = null;
   }
 
@@ -43,8 +43,14 @@ class ToneCircle {
     var circle = document.createElement('div');
     for (var attr in this.attrs)
       circle.setAttribute(attr, this.attrs[attr])
+    var label = document.createElement('img');
+    label.className = 'label';
+    label.src = 'img/' + this.osc.type + '.svg';
+    circle.appendChild(label);
     $canvas.append(circle)
-    this.$this = $canvas.find("#" + this.attrs.id)
+
+    // Store jQuery reference
+    this.$this = $canvas.children("#" + this.attrs.id)
 
     // Power up oscillator
     this.osc.frequency.setValueAtTime(0, ctx.currentTime);
@@ -60,9 +66,9 @@ class ToneCircle {
   toggleHighlight() {
     this.highlighted = !this.highlighted;
     if (this.highlighted)
-      this.$this.css('background-color', 'black')
+      this.$this.css('border', '1px dashed rgba(255, 255, 255, 1)')
     else
-      this.$this.css('background-color', 'grey')
+      this.$this.css('border', '1px dashed rgba(255, 255, 255, 0)')
   }
 
   move(event) {
