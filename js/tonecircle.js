@@ -12,8 +12,8 @@ class ToneCircle {
     // Wire up the oscillator
     this.osc  = ctx.createOscillator();
     this.gain = ctx.createGain();
-    this.osc.connect(this.gain)
-            .connect(ctx.destination);
+    this.osc.connect(this.gain);
+            // .connect(ctx.destination);
 
     // Initialize oscillator parameters
     this.osc.type = wavetype;
@@ -78,8 +78,8 @@ class ToneCircle {
   }
 
   makeNote(duration) {
-    this.osc.start();
-    setTimeout(() => this.osc.stop(), duration);
+    this.osc.connect(ctx.destination);
+    setTimeout(() => {this.osc.disconnect(ctx.destination)}, duration);
   }
 
   move(event) {

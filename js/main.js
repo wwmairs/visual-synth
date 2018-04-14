@@ -4,25 +4,42 @@ $(document).ready(() => {
   $btns = $(".osc-btn");
 
   var circles = {};
-  // num steps in sequencer
   var steps = [];
 
-  function playSequence(stepLength) {
-    // console.log("steps:", steps);
-    console.log("circles:", circles);
+  // these values should be user setable
+  var NOTE_DURATION = 250;
+  var SEQUENCE_LENGTH = 2000;
+
+  function playSequence(sequenceLength) {
+    let stepLength = sequenceLength / NUMSTEPS;
     // initialize steps
     for (var i = 0; i < NUMSTEPS; i++) {
       steps[i] = [];
     }
-    for (var i = 0; i < circles.length; i++) {
-      steps[circles[i].whichStep()].push(circles[i]);
-      console.log("new steps[i]", steps[circles[i].whichStep()]);
+    let circlesArray = Object.entries(circles);
+    for (var i = 0; i < circlesArray.length; i++) {
+      let c = circlesArray[i][1];
+      let step = c.whichStep();
+      if (step < NUMSTEPS && step > 0) {
+        steps[step].push(c);
+      }
     }
-    // figure out what belongs in what step
-    // play a step
-    // wait stepLength
-    // play the next
-    // et c.
+    playSteps(steps, 0, stepLength);
+  }
+
+  // who doesn't love asyncrhonous programming?????
+  function playSteps(steps, index, stepLength) {
+    let notes = steps[index];
+    if (notes != undefined) {
+      if (index <= 7) {
+        console.log("STEP NO:", index);
+        for (var i = 0; i < notes.length; i++) {
+            notes[i].makeNote(NOTE_DURATION);
+        }
+        setTimeout(() => {playSteps(steps, index + 1, stepLength)}, 
+                   stepLength);
+      }
+    }
   }
 
 
@@ -87,5 +104,5 @@ $(document).ready(() => {
     }
   })
 
-  window.setInterval(playSequence, 1000);
+  window.setInterval(() => {playSequence(SEQUENCE_LENGTH)}, SEQUENCE_LENGTH);
 });
