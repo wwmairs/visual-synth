@@ -5,7 +5,12 @@ $(document).ready(() => {
 
   var circles = {};
   // num steps in sequencer
-  var numSteps = 8;
+  var steps = [];
+
+  // initialize steps
+  for (var i = 0; i < NUMSTEPS; i++) {
+    steps[i] = [];
+  }
 
   // draw sequencer step lines
   const svgns = "http://www.w3.org/2000/svg";
@@ -13,12 +18,12 @@ $(document).ready(() => {
   var svg = document.createElementNS(svgns, "svg");
   let seqHeight = window.innerHeight - 60;
   let seqWidth = window.innerWidth;
-  let stepWidth = seqWidth / numSteps;
+  let stepWidth = seqWidth / NUMSTEPS;
   container.appendChild(svg);
   svg.setAttribute("width", seqWidth);
   // let's just use that hardcoded osc-btn height
   svg.setAttribute("height", seqHeight); 
-  for (var i = 1; i < numSteps; i++) {
+  for (var i = 1; i < NUMSTEPS; i++) {
     let x = i * stepWidth;
     let line = document.createElementNS(svgns, "line");
     line.setAttribute("x1", x);

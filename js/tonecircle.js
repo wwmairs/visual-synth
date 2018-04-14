@@ -71,6 +71,11 @@ class ToneCircle {
       this.$this.css('border', '1px dashed rgba(255, 255, 255, 0)')
   }
 
+  whichStep(x) {
+    let stepWidth = window.innerWidth / NUMSTEPS;
+    return Math.floor(x / stepWidth); 
+  }
+
   move(event) {
     var target = event.target,
       // Keep the dragged position in the data-x/data-y attributes
@@ -91,5 +96,6 @@ class ToneCircle {
     const newFreq = event.pageX / oscAttrs.FREQSCALE;
     this.gain.gain.setValueAtTime(newGain, ctx.currentTime);
     this.osc.frequency.setValueAtTime(newFreq, ctx.currentTime);
+    console.log(this.whichStep(event.clientX));
   }
 }
