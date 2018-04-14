@@ -18,18 +18,18 @@ $(document).ready(() => {
   var svg = document.createElementNS(svgns, "svg");
   let seqHeight = window.innerHeight - 60;
   let seqWidth = window.innerWidth;
-  let stepWidth = seqWidth / NUMSTEPS;
+  let stepHeight = seqHeight / NUMSTEPS;
   container.appendChild(svg);
   svg.setAttribute("width", seqWidth);
   // let's just use that hardcoded osc-btn height
   svg.setAttribute("height", seqHeight); 
   for (var i = 1; i < NUMSTEPS; i++) {
-    let x = i * stepWidth;
+    let y = i * stepHeight;
     let line = document.createElementNS(svgns, "line");
-    line.setAttribute("x1", x);
-    line.setAttribute("x2", x);
-    line.setAttribute("y1", 0);
-    line.setAttribute("y2", seqHeight);
+    line.setAttribute("x1", 0);
+    line.setAttribute("x2", seqWidth);
+    line.setAttribute("y1", y);
+    line.setAttribute("y2", y);
     line.setAttribute("stroke", "lightgrey");
     svg.appendChild(line);
   }
