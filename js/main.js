@@ -7,10 +7,24 @@ $(document).ready(() => {
   // num steps in sequencer
   var steps = [];
 
-  // initialize steps
-  for (var i = 0; i < NUMSTEPS; i++) {
-    steps[i] = [];
+  function playSequence(stepLength) {
+    // console.log("steps:", steps);
+    console.log("circles:", circles);
+    // initialize steps
+    for (var i = 0; i < NUMSTEPS; i++) {
+      steps[i] = [];
+    }
+    for (var i = 0; i < circles.length; i++) {
+      steps[circles[i].whichStep()].push(circles[i]);
+      console.log("new steps[i]", steps[circles[i].whichStep()]);
+    }
+    // figure out what belongs in what step
+    // play a step
+    // wait stepLength
+    // play the next
+    // et c.
   }
+
 
   // draw sequencer step lines
   const svgns = "http://www.w3.org/2000/svg";
@@ -72,4 +86,6 @@ $(document).ready(() => {
       }
     }
   })
+
+  window.setInterval(playSequence, 1000);
 });

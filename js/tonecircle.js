@@ -54,7 +54,7 @@ class ToneCircle {
 
     // Power up oscillator
     this.osc.frequency.setValueAtTime(0, ctx.currentTime);
-    this.gain.gain.setValueAtTime(0, ctx.currentTime);
+    this.gain.gain.setValueAtTime(.2, ctx.currentTime);
     this.osc.start(0);
   }
 
@@ -71,9 +71,15 @@ class ToneCircle {
       this.$this.css('border', '1px dashed rgba(255, 255, 255, 0)')
   }
 
-  whichStep(y) {
+  whichStep() {
+    let y = this.$this.offset().top;
     let stepHeight = (window.innerHeight - 60) / NUMSTEPS;
     return Math.floor(y / stepHeight); 
+  }
+
+  makeNote(duration) {
+    this.osc.start();
+    setTimeout(() => this.osc.stop(), duration);
   }
 
   move(event) {
@@ -94,8 +100,8 @@ class ToneCircle {
     // Update oscillator attributes
     const newGain = (window.innerHeight - event.pageY) / oscAttrs.GAINSCALE;
     const newFreq = event.pageX / oscAttrs.FREQSCALE;
-    this.gain.gain.setValueAtTime(newGain, ctx.currentTime);
+    // disabled vertical pos as gain
+    // this.gain.gain.setValueAtTime(newGain, ctx.currentTime);
     this.osc.frequency.setValueAtTime(newFreq, ctx.currentTime);
-    console.log(this.whichStep(event.clientY));
   }
 }
