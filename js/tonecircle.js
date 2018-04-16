@@ -5,6 +5,13 @@
   */
 
 const ctx = new (window.AudioContext || window.webkitAudioContext);
+var biquadFilter = ctx.createBiquadFilter();
+
+// filter ish, this should be user settable too!
+biquadFilter.connect(ctx.destination);
+
+
+
 var globalID = 0;
 
 var backgroundColor = '#123552';
@@ -57,7 +64,7 @@ class ToneCircle {
 
     // Power up oscillator
     this.osc.frequency.setValueAtTime(0, ctx.currentTime);
-    this.gain.gain.setValueAtTime(.2, ctx.currentTime);
+    this.gain.gain.setValueAtTime(.3, ctx.currentTime);
     this.osc.start(0);
   }
 
@@ -81,10 +88,10 @@ class ToneCircle {
   }
 
   makeNote(duration) {
-    this.osc.connect(ctx.destination);
+    this.gain.connect(biquadFilter);
     this.$this.css('background-color', highlightedColor);
     setTimeout(() => {
-      this.osc.disconnect(ctx.destination);
+      this.gain.disconnect(biquadFilter);
       this.$this.css('background-color', backgroundColor);}, duration);
   }
 
