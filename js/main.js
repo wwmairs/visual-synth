@@ -6,12 +6,14 @@ $(document).ready(() => {
   var circles = {};
   var steps = [];
   var loop;   // this holds the loop
+  var sequencerOn = false;
 
   // these values should be user setable
   var NOTE_DURATION = 250;
   var SEQUENCE_LENGTH = 2000;
 
   function playSequence(sequenceLength) {
+    console.log("in playSequence");
     let stepLength = sequenceLength / NUMSTEPS;
     // initialize steps
     for (var i = 0; i < NUMSTEPS; i++) {
@@ -45,10 +47,13 @@ $(document).ready(() => {
 
 
   function startSequence(length) {
+    sequencerOn = true;
+    playSequence(length);
     return window.setInterval(() => {playSequence(length)}, length);
   }
 
   function stopSequence(loopId) {
+    sequencerOn = false;
     clearInterval(loopId);
   }
 
@@ -95,6 +100,16 @@ $(document).ready(() => {
       });
   })
 
+  $("#start-btn").mousedown((e) => {
+    if (sequencerOn) {
+      stopSequence(loop);
+      $("#start-btn").html("start");
+    } else {
+      loop = startSequence(SEQUENCE_LENGTH);
+      $("#start-btn").html("stop");
+    }
+  });
+
   // (Un)highlight clicked circles
   $body.on("dblclick", ".tonecircle", (e) => {
     const circle = circles[e.target.id]
@@ -113,5 +128,4 @@ $(document).ready(() => {
     }
   })
 
-  loop = startSequence(SEQUENCE_LENGTH);
 });
