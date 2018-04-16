@@ -20,10 +20,11 @@ $(document).ready(() => {
       steps[i] = [];
     }
     let circlesArray = Object.entries(circles);
+    console.log("circlesArray:", circlesArray);
     for (var i = 0; i < circlesArray.length; i++) {
       let c = circlesArray[i][1];
       let step = c.whichStep();
-      if (step < NUMSTEPS && step > 0) {
+      if (step < NUMSTEPS && step >= 0) {
         steps[step].push(c);
       }
     }
@@ -33,6 +34,7 @@ $(document).ready(() => {
   // who doesn't love asyncrhonous programming?????
   function playSteps(steps, index, stepLength) {
     let notes = steps[index];
+    console.log("notes in step ", index, notes);
     if (notes != undefined) {
       if (index <= 7) {
         console.log("STEP NO:", index);
