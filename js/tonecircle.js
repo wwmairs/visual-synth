@@ -7,6 +7,9 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext);
 var globalID = 0;
 
+var backgroundColor = '#123552';
+var highlightedColor = '#FAE773';
+
 class ToneCircle {
   constructor(initx, inity, wavetype="sine") {
     // Wire up the oscillator
@@ -79,7 +82,10 @@ class ToneCircle {
 
   makeNote(duration) {
     this.osc.connect(ctx.destination);
-    setTimeout(() => {this.osc.disconnect(ctx.destination)}, duration);
+    this.$this.css('background-color', highlightedColor);
+    setTimeout(() => {
+      this.osc.disconnect(ctx.destination);
+      this.$this.css('background-color', backgroundColor);}, duration);
   }
 
   move(event) {

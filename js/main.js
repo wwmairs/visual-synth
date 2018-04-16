@@ -5,6 +5,7 @@ $(document).ready(() => {
 
   var circles = {};
   var steps = [];
+  var loop;   // this holds the loop
 
   // these values should be user setable
   var NOTE_DURATION = 250;
@@ -42,6 +43,14 @@ $(document).ready(() => {
     }
   }
 
+
+  function startSequence(length) {
+    return window.setInterval(() => {playSequence(length)}, length);
+  }
+
+  function stopSequence(loopId) {
+    clearInterval(loopId);
+  }
 
   // draw sequencer step lines
   const svgns = "http://www.w3.org/2000/svg";
@@ -104,5 +113,5 @@ $(document).ready(() => {
     }
   })
 
-  window.setInterval(() => {playSequence(SEQUENCE_LENGTH)}, SEQUENCE_LENGTH);
+  loop = startSequence(SEQUENCE_LENGTH);
 });
