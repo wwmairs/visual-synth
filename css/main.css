@@ -66,6 +66,11 @@ svg {
   z-index: 1;
 }
 
-#triangle {
+#options-btn {
+  height: 60px;
+  border: 1px dashed;
+  border-left: 0px;
   border-right: 0px;
+  border-bottom: 0px;
+  z-index: 1;
 }
