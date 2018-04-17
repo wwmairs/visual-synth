@@ -9,11 +9,12 @@ var biquadFilter = ctx.createBiquadFilter();
 
 // filter ish, this should be user settable too!
 biquadFilter.connect(ctx.destination);
-biquadFilter.type = "lowpass";
-biquadFilter.frequency.setValueAtTime(200, ctx.currentTime);
-biquadFilter.gain.setValueAtTime(25, ctx.currentTime);
-biquadFilter.Q.setValueAtTime(15, ctx.currentTime);
+biquadFilter.type = "highpass";
+biquadFilter.frequency.setValueAtTime(500, ctx.currentTime);
+biquadFilter.gain.setValueAtTime(100, ctx.currentTime);
+biquadFilter.Q.setValueAtTime(20, ctx.currentTime);
 
+const DEFAULT_GAIN = 0.3;
 
 var globalID = 0;
 
@@ -67,7 +68,8 @@ class ToneCircle {
 
     // Power up oscillator
     this.osc.frequency.setValueAtTime(0, ctx.currentTime);
-    this.gain.gain.setValueAtTime(.3, ctx.currentTime);
+    this.gain.gain.setValueAtTime(0, ctx.currentTime);
+    this.gain.connect(biquadFilter);
     this.osc.start(0);
   }
 
@@ -91,10 +93,10 @@ class ToneCircle {
   }
 
   makeNote(duration) {
-    this.gain.connect(biquadFilter);
+    this.gain.gain.setValueAtTime(DEFAULT_GAIN, ctx.currentTime);
     this.$this.css('background-color', highlightedColor);
     setTimeout(() => {
-      this.gain.disconnect(biquadFilter);
+      this.gain.gain.setValueAtTime(0, ctx.currentTime);
       this.$this.css('background-color', backgroundColor);}, duration);
   }
 

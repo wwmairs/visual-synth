@@ -3,6 +3,18 @@ $(document).ready(() => {
   $canvas = $("#canvas");
   $btns = $(".osc-btn");
 
+
+  // for the slider
+  // from https://www.w3schools.com/howto/howto_js_rangeslider.asp
+  var slider = document.getElementById("myRange");
+
+  // Update the current slider value (each time you drag the slider handle)
+  slider.oninput = function() {
+    console.log("slider", this.value);
+    biquadFilter.frequency.setValueAtTime(this.value, ctx.currentTime + 1);
+    console.log(biquadFilter.frequency.value);
+  }
+
   var circles = {};
   var steps = [];
   var loop;   // this holds the loop
@@ -13,14 +25,12 @@ $(document).ready(() => {
   var SEQUENCE_LENGTH = 2000;
 
   function playSequence(sequenceLength) {
-    console.log("in playSequence");
     let stepLength = sequenceLength / NUMSTEPS;
     // initialize steps
     for (var i = 0; i < NUMSTEPS; i++) {
       steps[i] = [];
     }
     let circlesArray = Object.entries(circles);
-    console.log("circlesArray:", circlesArray);
     for (var i = 0; i < circlesArray.length; i++) {
       let c = circlesArray[i][1];
       let step = c.whichStep();
@@ -34,10 +44,8 @@ $(document).ready(() => {
   // who doesn't love asyncrhonous programming?????
   function playSteps(steps, index, stepLength) {
     let notes = steps[index];
-    console.log("notes in step ", index, notes);
     if (notes != undefined) {
       if (index <= NUMSTEPS) {
-        console.log("STEP NO:", index);
         for (var i = 0; i < notes.length; i++) {
             notes[i].makeNote(NOTE_DURATION);
         }

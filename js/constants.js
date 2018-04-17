@@ -1,4 +1,4 @@
-var NUMSTEPS = 16;
+var NUMSTEPS = 4;
 
 const keys = {
   BACKSPACE: 8
