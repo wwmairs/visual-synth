@@ -9,10 +9,10 @@ var biquadFilter = ctx.createBiquadFilter();
 
 // filter ish, this should be user settable too!
 biquadFilter.connect(ctx.destination);
-biquadFilter.type = "highpass";
+biquadFilter.type = "lowpass";
 biquadFilter.frequency.setValueAtTime(500, ctx.currentTime);
 biquadFilter.gain.setValueAtTime(100, ctx.currentTime);
-biquadFilter.Q.setValueAtTime(20, ctx.currentTime);
+biquadFilter.Q.setValueAtTime(15, ctx.currentTime);
 
 const DEFAULT_GAIN = 0.3;
 
