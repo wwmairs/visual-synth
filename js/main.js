@@ -6,13 +6,11 @@ $(document).ready(() => {
 
   // for the slider
   // from https://www.w3schools.com/howto/howto_js_rangeslider.asp
-  var slider = document.getElementById("myRange");
+  var filterRange = document.getElementById("filterRange");
 
   // Update the current slider value (each time you drag the slider handle)
-  slider.oninput = function() {
-    console.log("slider", this.value);
+  filterRange.oninput = function() {
     biquadFilter.frequency.setValueAtTime(this.value, ctx.currentTime + 1);
-    console.log(biquadFilter.frequency.value);
   }
 
   var circles = {};
