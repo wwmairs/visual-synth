@@ -9,7 +9,10 @@ var biquadFilter = ctx.createBiquadFilter();
 
 // filter ish, this should be user settable too!
 biquadFilter.connect(ctx.destination);
-
+biquadFilter.type = "lowpass";
+biquadFilter.frequency.setValueAtTime(200, ctx.currentTime);
+biquadFilter.gain.setValueAtTime(25, ctx.currentTime);
+biquadFilter.Q.setValueAtTime(15, ctx.currentTime);
 
 
 var globalID = 0;

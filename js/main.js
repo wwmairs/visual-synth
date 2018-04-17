@@ -9,7 +9,7 @@ $(document).ready(() => {
   var sequencerOn = false;
 
   // these values should be user setable
-  var NOTE_DURATION = 250;
+  var NOTE_DURATION = 125;
   var SEQUENCE_LENGTH = 2000;
 
   function playSequence(sequenceLength) {
@@ -36,7 +36,7 @@ $(document).ready(() => {
     let notes = steps[index];
     console.log("notes in step ", index, notes);
     if (notes != undefined) {
-      if (index <= 7) {
+      if (index <= NUMSTEPS) {
         console.log("STEP NO:", index);
         for (var i = 0; i < notes.length; i++) {
             notes[i].makeNote(NOTE_DURATION);
