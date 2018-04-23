@@ -10,9 +10,15 @@ $(document).ready(() => {
   // from https://www.w3schools.com/howto/howto_js_rangeslider.asp
   var filterRange = document.getElementById("filterRange");
 
+  var modRange = document.getElementById("modRange");
+
   // Update the current slider value (each time you drag the slider handle)
   filterRange.oninput = function() {
     biquadFilter.frequency.setValueAtTime(this.value, ctx.currentTime + 1);
+  }
+
+  modRange.oninput = function() {
+    modProd = this.value / 1000;
   }
 
   var circles = {};

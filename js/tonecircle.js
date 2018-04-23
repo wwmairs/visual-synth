@@ -7,10 +7,23 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext);
 var biquadFilter = ctx.createBiquadFilter();
 
+// playing around with FM
+var modulator = ctx.createOscillator(),
+    modGain   = ctx.createGain();
+
+var modProd = 1;
+var modFrac = 4;
+
+modulator.type = "square";
+modulator.frequency.setValueAtTime(200, ctx.currentTime);
+modGain.gain.setValueAtTime(100, ctx.currentTime);
+modulator.connect(modGain);  
+modulator.start();
+
 // filter ish, this should be user settable too!
 biquadFilter.connect(ctx.destination);
 biquadFilter.type = "lowpass";
-biquadFilter.frequency.setValueAtTime(500, ctx.currentTime);
+biquadFilter.frequency.setValueAtTime(1000, ctx.currentTime);
 biquadFilter.gain.setValueAtTime(100, ctx.currentTime);
 biquadFilter.Q.setValueAtTime(15, ctx.currentTime);
 
@@ -71,6 +84,9 @@ class ToneCircle {
     this.gain.gain.setValueAtTime(0, ctx.currentTime);
     this.gain.connect(biquadFilter);
     this.osc.start(0);
+
+    // connect modulator to frequency
+    modGain.connect(this.osc.frequency);
   }
 
   erase() {
@@ -93,6 +109,11 @@ class ToneCircle {
   }
 
   makeNote(duration) {
+    let modFreq = Math.floor((this.osc.frequency.value * modProd ) / 
+                  (this.osc.frequency.value / modFrac)) * 
+    (this.osc.frequency.value / modFrac);
+    console.log("mod freq:", modFreq);
+    modulator.frequency.setValueAtTime(modFreq, ctx.currentTime);
     this.gain.gain.setValueAtTime(DEFAULT_GAIN, ctx.currentTime);
     this.$this.css('background-color', highlightedColor);
     setTimeout(() => {
@@ -118,8 +139,7 @@ class ToneCircle {
     // Update oscillator attributes
     const newGain = (window.innerHeight - event.pageY) / oscAttrs.GAINSCALE;
     const newFreq = event.pageX / oscAttrs.FREQSCALE;
-    // disabled vertical pos as gain
-    // this.gain.gain.setValueAtTime(newGain, ctx.currentTime);
+
     this.osc.frequency.setValueAtTime(newFreq, ctx.currentTime);
   }
 }
