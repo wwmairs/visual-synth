@@ -5,7 +5,7 @@ const keys = {
 }
 
 const circleAttrs = {
-  DIAMETER: 40
+  DIAMETER: 60
 }
 
 const canvasAttrs = {

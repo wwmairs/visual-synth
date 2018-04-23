@@ -12,7 +12,7 @@ var modulator = ctx.createOscillator(),
     modGain   = ctx.createGain();
 
 var modProd = 1;
-var modFrac = 4;
+var modFrac = 12;
 
 modulator.type = "square";
 modulator.frequency.setValueAtTime(200, ctx.currentTime);
