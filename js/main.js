@@ -1,3 +1,5 @@
+// don't forget about web audio weekly
+
 $(document).ready(() => {
   $body = $("body");
   $canvas = $("#canvas");
