@@ -8,17 +8,25 @@ const ctx = new (window.AudioContext || window.webkitAudioContext);
 var biquadFilter = ctx.createBiquadFilter();
 
 // playing around with FM
-var modulator = ctx.createOscillator(),
-    modGain   = ctx.createGain();
+var modulator1 = ctx.createOscillator(),
+    modGain1   = ctx.createGain(),
+    modulator2 = ctx.createOscillator(),
+    modGain2   = ctx.createGain();
 
 var modProd = 1;
 var modFrac = 12;
 
-modulator.type = "square";
-modulator.frequency.setValueAtTime(200, ctx.currentTime);
-modGain.gain.setValueAtTime(100, ctx.currentTime);
-modulator.connect(modGain);  
-modulator.start();
+modulator1.type = "square";
+modulator1.frequency.setValueAtTime(200, ctx.currentTime);
+modGain1.gain.setValueAtTime(100, ctx.currentTime);
+modulator1.connect(modGain1);  
+modulator1.start();
+
+modulator2.type = "triangle";
+modulator2.frequency.setValueAtTime(200, ctx.currentTime);
+modGain2.gain.setValueAtTime(100, ctx.currentTime);
+modulator2.connect(modGain2);
+modulator2.start();
 
 // filter ish, this should be user settable too!
 biquadFilter.connect(ctx.destination);
@@ -86,7 +94,8 @@ class ToneCircle {
     this.osc.start(0);
 
     // connect modulator to frequency
-    modGain.connect(this.osc.frequency);
+    modGain1.connect(this.osc.frequency);
+    modGain2.connect(this.osc.frequency)
   }
 
   erase() {
@@ -113,7 +122,8 @@ class ToneCircle {
                   (this.osc.frequency.value / modFrac)) * 
     (this.osc.frequency.value / modFrac);
     console.log("mod freq:", modFreq);
-    modulator.frequency.setValueAtTime(modFreq, ctx.currentTime);
+    modulator1.frequency.setValueAtTime(modFreq, ctx.currentTime);
+    modulator2.frequency.setValueAtTime(modFreq, ctx.currentTime);
     this.gain.gain.setValueAtTime(DEFAULT_GAIN, ctx.currentTime);
     this.$this.css('background-color', highlightedColor);
     setTimeout(() => {
