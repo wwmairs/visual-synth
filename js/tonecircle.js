@@ -45,13 +45,16 @@ var highlightedColor = '#FAE773';
 class ToneCircle {
   constructor(initx, inity, wavetype="sine") {
     // Wire up the oscillator
-    this.osc  = ctx.createOscillator();
-    this.gain = ctx.createGain();
-    this.osc.connect(this.gain);
-            // .connect(ctx.destination);
+    this.vco  = new VCO(ctx);
+    this.vca  = new VCA(ctx);
+    this.env  = new ADSR(ctx);
 
-    // Initialize oscillator parameters
-    this.osc.type = wavetype;
+    this.vco.connect(this.vca);
+    this.env.connect(this.vca.amplitudeParam);
+    this.vca.connect(biquadFilter);
+
+    this.wavetype     = wavetype;
+    this.vca.waveForm = wavetype;
     
     // Initialize circle parameters
     this.highlighted = false;
@@ -80,22 +83,16 @@ class ToneCircle {
       circle.setAttribute(attr, this.attrs[attr])
     var label = document.createElement('img');
     label.className = 'label';
-    label.src = 'img/' + this.osc.type + '.svg';
+    label.src = 'img/' + this.wavetype + '.svg';
     circle.appendChild(label);
     $canvas.append(circle)
 
     // Store jQuery reference
     this.$this = $canvas.children("#" + this.attrs.id)
 
-    // Power up oscillator
-    this.osc.frequency.setValueAtTime(0, ctx.currentTime);
-    this.gain.gain.setValueAtTime(0, ctx.currentTime);
-    this.gain.connect(biquadFilter);
-    this.osc.start(0);
-
     // connect modulator to frequency
-    modGain1.connect(this.osc.frequency);
-    modGain2.connect(this.osc.frequency)
+    modGain1.connect(this.vco.frequencyParam);
+    modGain2.connect(this.vco.frequencyParam)
   }
 
   erase() {
@@ -118,16 +115,15 @@ class ToneCircle {
   }
 
   makeNote(duration) {
-    let modFreq = Math.floor((this.osc.frequency.value * modProd ) / 
-                  (this.osc.frequency.value / modFrac)) * 
-    (this.osc.frequency.value / modFrac);
+    let modFreq = Math.floor((this.vco.frequency * modProd ) / 
+                  (this.vco.frequency / modFrac)) * 
+    (this.vco.frequency / modFrac);
     console.log("mod freq:", modFreq);
     modulator1.frequency.setValueAtTime(modFreq, ctx.currentTime);
     modulator2.frequency.setValueAtTime(modFreq, ctx.currentTime);
-    this.gain.gain.setValueAtTime(DEFAULT_GAIN, ctx.currentTime);
     this.$this.css('background-color', highlightedColor);
+    this.env.gateOn();
     setTimeout(() => {
-      this.gain.gain.setValueAtTime(0, ctx.currentTime);
       this.$this.css('background-color', backgroundColor);}, duration);
   }
 
@@ -149,7 +145,6 @@ class ToneCircle {
     // Update oscillator attributes
     const newGain = (window.innerHeight - event.pageY) / oscAttrs.GAINSCALE;
     const newFreq = event.pageX / oscAttrs.FREQSCALE;
-
-    this.osc.frequency.setValueAtTime(newFreq, ctx.currentTime);
+    this.vco.frequency = newFreq;
   }
 }
