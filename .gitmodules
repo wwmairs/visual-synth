@@ -1,0 +1,3 @@
+[submodule "js/visual-synth"]
+	path = js/visual-synth
+	url = https://github.com/wwmairs/visual-synth.git
